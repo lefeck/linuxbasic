@@ -1,32 +1,6 @@
 # Cache的基本原理
 
-
-
-对于没有接触过底层技术的朋友来说，或许从未听说过cache。毕竟cache的存在对程序员来说是透明的。在接触cache之前，先为你准备段code分析。
-
-```c
-int arr[10][128];
-
-for (i = 0; i < 10; i++)
-        for (j = 0; j < 128; j++)
-                arr[i][j] = 1;
-```
-
-如果你曾经学习过C/C++语言，这段code自然不会陌生。如此简单的将`arr`数组所有元素置1。 你有没有想过这段code还有下面的一种写法。
-
-```c
-int arr[10][128];
-
-for (i = 0; i < 128; i++)
-        for (j = 0; j < 10; j++)
-                arr[j][i] = 1;
-```
-
-功能完全一样，但是我们一直在重复着第一种写法（或许很多的书中也是建议这么编码），你是否想过这其中的缘由？文章的主角是cache，所以你一定猜到了答案。那么cache是如何影响这2段code的呢？
-
 ## 为什么需要cache
-
-在思考为什么需要cache之前，我们首先先来思考另一个问题：我们的程序是如何运行起来的？
 
 我们应该知道程序是运行在 RAM之中，RAM 就是我们常说的DDR（例如： DDR3、DDR4等）。我们称之为main memory（主存）。当我们需要运行一个进程的时候，首先会从磁盘设备（例如，eMMC、UFS、SSD等）中将可执行程序load到主存中，然后开始执行。在CPU内部存在一堆的通用寄存器（register）。如果CPU需要将一个变量（假设地址是A）加1，一般分为以下3个步骤：
 
@@ -36,7 +10,7 @@ for (i = 0; i < 128; i++)
 
 我们将这个过程可以表示如下：
 
-![img](https://github.com/wangjinh/picture/blob/master/flash.jpg)
+![img](https://github.com/wangjinh/picture/blob/master/flash1.jpg)
 
 其实现实中，CPU通用寄存器的速度和主存之间存在着太大的差异。两者之间的速度大致如下关系：
 
@@ -52,11 +26,11 @@ CPU和主存之间直接数据传输的方式转变成CPU和cache之间直接数
 
 cahe的速度在一定程度上同样影响着系统的性能。一般情况cache的速度可以达到1ns，几乎可以和CPU寄存器速度媲美。为了进一步提升性能，引入多级cache。前面提到的cache，称之为L1 cache（第一级cache）。我们在L1 cache 后面连接L2 cache，在L2 cache 和主存之间连接L3 cache。等级越高，速度越慢，容量越大。但是速度相比较主存而言，依然很快。不同等级cache速度之间关系如下：
 
-![img](https://pic1.zhimg.com/80/v2-0910f3308b1d0e425c308307869a3f68_720w.jpg)
+![img](https://github.com/wangjinh/picture/blob/master/65ns.jpg)
 
 经过3级cache的缓冲，各级cache和主存之间的速度最萌差也逐级减小。在一个真实的系统上，各级cache之间硬件上是如何关联的呢？我们看下Cortex-A53架构上各级cache之间的硬件抽象框图如下：
 
-![img](https://pic3.zhimg.com/80/v2-155a251f204f87982b21b742002ef136_720w.jpg)
+![img](https://github.com/wangjinh/picture/blob/master/bus.jpg)
 
 在Cortex-A53架构上，L1 cache分为单独的instruction cache（ICache）和data cache（DCache）。L1 cache是CPU私有的，每个CPU都有一个L1 cache。一个cluster 内的所有CPU共享一个L2 cache，L2 cache不区分指令和数据，都可以缓存。所有cluster之间共享L3 cache。L3 cache通过总线和主存相连。
 
@@ -64,7 +38,7 @@ cahe的速度在一定程度上同样影响着系统的性能。一般情况cach
 
 首先引入两个名词概念，命中和缺失。 CPU要访问的数据在cache中有缓存，称为“命中” (hit)，反之则称为“缺失” (miss)。多级cache之间是如何配合工作的呢？我们假设现在考虑的系统只有两级cache。
 
-![img](https://pic2.zhimg.com/80/v2-4974c1f109f00f887fceda68b37bd3f5_720w.jpg)
+![img](https://github.com/wangjinh/picture/blob/master/mulcache.jpg)
 
 当CPU试图从某地址load数据时，首先从L1 cache中查询是否命中，如果命中则把数据返回给CPU。如果L1 cache缺失，则继续从L2 cache中查找。当L2 cache命中时，数据会返回给L1 cache以及CPU。如果L2 cache也缺失，我们需要从主存中load数据，将数据返回给L2 cache、L1 cache及CPU。这种多级cache的工作方式称为：包容型缓存(inclusive cache)。某一地址的数据可能存在多级缓存中。与inclusive cache对应的是exclusive cache，这种cache保证某一地址的数据缓存只会存在于多级cache其中一级。也就是说，任意地址的数据不可能同时在L1和L2 cache中缓存。
 
