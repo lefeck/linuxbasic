@@ -192,10 +192,3 @@ cache更新策略是指当发生cache命中时，写操作应该如何更新数�
 
 当写回操作完成，我们将主存中0x28地址开始的8个字节加载到该cache line中，并清除dirty bit。然后根据offset找到0x52返回给CPU。
 
-
-
-## 问题解答
-
-回到最初提到的问题。不知你是否已经明白其中的原因。我们下篇文章仔细展开该问题。
-
-[https://zhuanlan.zhihu.com/p/102326184zhuanlan.zhihu.com![图标](https://zhstatic.zhihu.com/assets/zhihu/editor/zhihu-card-default.svg)](https://zhuanlan.zhihu.com/p/102326184)
