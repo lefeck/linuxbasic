@@ -50,11 +50,11 @@ cahe的速度在一定程度上同样影响着系统的性能。一般情况cach
 
 我们假设下面的讲解都是针对64 Bytes大小的cache，并且cache line大小是8字节。我们可以类似把这块cache想想成一个数组，数组总共8个元素，每个元素大小是8字节。如下图所示:
 
-![img](https://pic1.zhimg.com/80/v2-3e0de5f8b95e27dbd41328c9d089224c_720w.jpg)
+![img](https://github.com/wangjinh/picture/blob/master/cacheline.jpg)
 
 现在我们考虑一个问题，CPU从`0x0654`地址读取一个字节，cache控制器是如何判断数据是否在cache中命中呢？cache大小相对于主存来说，可谓是小巫见大巫。所以cache肯定是只能缓存主存中极小一部分数据。我们如何根据地址在有限大小的cache中查找数据呢？现在硬件采取的做法是对地址进行散列（可以理解成地址取模操作）。我们接下来看看是如何做到的？
 
-![img](https://pic2.zhimg.com/80/v2-e8deb539258684ad9d4dffef08b02c09_720w.jpg)
+![img](https://github.com/wangjinh/picture/blob/master/index1.jpg)
 
 上图共有8个块，每个块大小是8 Bytes。所以我们可以利用地址低3 bits（如上图地址蓝色部分）用来寻址8 bytes中某一字节，我们称这部分bit组合为**offset**。同理，8行`cache line`，为了覆盖所有行。我们需要3 bits（如上图地址黄色部分）查找某一行，这部分地址部分称之为**index**。
 
@@ -66,7 +66,7 @@ cahe的速度在一定程度上同样影响着系统的性能。一般情况cach
 
 上面的例子中，cache size是64 Bytes并且cache line size是8 bytes。offset、index和tag分别使用3 bits、3 bits和42 bits（假设地址宽度是48 bits）。我们现在再看一个例子：512 Bytes cache size，64 Bytes cache line size。根据之前的地址划分方法，offset、index和tag分别使用6 bits、3 bits和39 bits。如下图所示。
 
-![img](https://pic2.zhimg.com/80/v2-f6fdf760d314f146941e2192957f1a81_720w.jpg)
+![img](https://github.com/wangjinh/picture/blob/master/index2.jpg)
 
 ### 优缺点
 
