@@ -48,7 +48,7 @@
 
 ​    3）、Partition的磁柱数量
 
-## 第二阶段：grub启动引导
+## 第二阶段：加载主引导记录（MBR）
 
 GRUB 的作用有以下几个：
 
@@ -228,7 +228,7 @@ bin  boot  data  dev  etc  home  lib  lib64  media  mnt  opt  proc  root  run  s
 
 
 
-## 第四阶段：init初始化
+## 第四阶段：运行/sbin/init，进行系统初始化 
 
 ​		内核并加载进内存运行并以读写方式挂载完根文件系统后，执行第一个用户进程init，init首先运行/etc/init/rcS.conf脚本，如下图：
 
