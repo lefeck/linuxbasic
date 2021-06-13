@@ -171,7 +171,7 @@ UUID=b9a7a1a8-767f-4a87-8a2b-a535edb362c9 / ext4 defaults 1 1
 
 
 
-## 第三阶段：**加载内核，初始化initrd**	
+## 第三阶段：**通过内核，完成initrd初始化**	
 
 ​		GRUB把内核加载到内存后展开并运行， 此时GRUB的任务已经完成，Kerenl在得到系统控制权之后，首先要进行自身初始化，而**初始化的主要作用**：
 
@@ -266,7 +266,7 @@ init执行完/etc/rc.d/rc.sysinit后，将会执行/etc/inittab来设定系统�
 在systemd中runlevel已被target取代，systemd会读取/etc/systemd/system/default.target来决定启动到什么样的target(sysv中称为runlevel)，这是一个符号链接，指向/usr/lib/systemd/system/下相应的target，由于可以实现并行启动，systemd没有严格的启动顺序。在CLI环境default.target指向/lib/systemd/system/multi-user.target，systemd通过读取target文件进行下一步操作，比如运行/usr/lib/systemd/system/sysinit.target开始系统初始化，这些都依赖于相应的target文件中的配置。
 ```
 
-**打印登录提示符**
+## 第五阶段：打印登录提示符
 
 系统初始化完成后，init给出用户登 录提示符（login）或者图形化登录界面，用户输入用户和密码登陆后，系统会为用户分配一个用户ID（uid）和组ID（gid），这两个ID是用户的 身份标识，用于检测用户运行程序时的身份验证。登录成功后，整个系统启动流程运行完毕！ 
 
