@@ -24,7 +24,7 @@
 
 
 
-### 第二步：引导MBR启动Bootloader
+### 第二步：加载主引导记录录（MBR)
 
 ​        开机自检完成后，CPU首先读取位于CMOS中的BIOS程序，按照BIOS中设定的启动次序（Boot Sequence)逐一查找可启动设备,找到可启动的设备后，去该设备的第一个扇区 中读取MBR，那么MBR是什么哪？它又有什么作用哪？       
 
@@ -48,7 +48,7 @@
 
 ​    3）、Partition的磁柱数量
 
-## 第二阶段：加载主引导记录（MBR）
+## 第二阶段：加载内核到kernel
 
 GRUB 的作用有以下几个：
 
@@ -274,7 +274,7 @@ init执行完/etc/rc.d/rc.sysinit后，将会执行/etc/inittab来设定系统�
 
 **在整个启动过程中要读取执行的脚本流程大致如下：**
 
-![6oo653g360](/Users/jinhuaiwang/Desktop/linux system kernel/picture/6oo653g360.jpeg)
+![6oo653g360](https://github.com/wangjinh/picture/blob/master/6oo653g360.jpeg)
 
 ### 总结
 
@@ -287,13 +287,8 @@ POST --> BIOS --> MBR --> Bootloader --> kernel + ramdisk --> rootfs(read-only) 
 ```
 
 
-
 UEFI + GPT
 
 ```
 POST --> UEFI --> EFI Application(Bootloader) --> kernel + ramdisk --> rootfs(read-only) --> /sbin/init(systemd) --> login
 ```
-
-
-
-https://jaydenz.github.io/2018/05/05/4.Linux系统启动流程/#总结
