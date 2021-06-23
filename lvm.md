@@ -1,6 +1,6 @@
 
 
-##**背景，概述**##   
+### **背景，概述** 
 MBR（Master Boot Record）（主引导记录）和GPT（GUID Partition Table）（GUID意为全局唯一标识符）是在磁盘上存储分区信息的两种不同方式
 
 对于传统的MBR分区方式，有很多的限制： 
