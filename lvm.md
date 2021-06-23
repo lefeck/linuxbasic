@@ -1,4 +1,4 @@
-
+## LVM扩容
 
 ### **背景，概述** 
 MBR（Master Boot Record）（主引导记录）和GPT（GUID Partition Table）（GUID意为全局唯一标识符）是在磁盘上存储分区信息的两种不同方式
@@ -17,9 +17,9 @@ MBR（Master Boot Record）（主引导记录）和GPT（GUID Partition Table）
 
 ![在这里插入图片描述](https://ekojunaidisalam.com/wp-content/uploads/2016/03/LVM-1024x944.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl8zOTc3NzYyNg==,size_16,color_FFFFFF,t_70)
 
-LVM1版本需要2.4（包括）以后的内核支持；LVM2需要2.6（包括）以后的内核版本支持。
-
+LVM扩容思维流程：创建一个物理分区 –-> 将这个物理分区转换为物理卷 –-> 把这个物理卷添加到要扩展的卷组中 -–> 然后才能用extend命令扩展此卷组中的逻辑卷。
 ```
+#操作系统
 [root@localhost ~]# cat /etc/redhat-release 
 CentOS Linux release 7.4.1708 (Core) 
 [root@localhost ~]# uname -r
