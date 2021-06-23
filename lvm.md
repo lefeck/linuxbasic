@@ -1,30 +1,17 @@
 
 
-# **LVM**
+##**背景，概述**##
+MBR（Master Boot Record）（主引导记录）和GPT（GUID Partition Table）（GUID意为全局唯一标识符）是在磁盘上存储分区信息的两种不同方式
 
+对于传统的MBR分区方式，有很多的限制： 
+1：最多4个主分区（3个主分区+1个扩展分区(扩展分区里面可以放多个逻辑分区)），无法创建大于2TB的分区，使用fdisk分区工具，而GPT分区方式不受这样的限制。  
+2：GPT分区方式将不会有这种限制，使用的工具是parted；  
 
+逻辑卷管理(LVM)，是 Logical Volume Manager（逻辑卷管理）的简写，lvm是卷的一种管理方式，并不是分区工具（也可不采用这种LVM管理方式）。
 
-## LVM根分区扩容
+### **LVM管理导图**
 
-
-
-**LVM对比传统硬盘存储的优点:**
-
-​		1、统一管理：整合多个磁盘或分区形成一个资源池    
-​		2、灵活性：可以使用不同磁盘、不同分区来组成一个逻辑卷    
-​		3、可伸缩性：逻辑卷和卷组的容量都可以使用命令来扩展或者缩减，且不会影响破坏原有数据，支持磁盘热插拔。   
-​		4、支持在线数据移动   
-​		6、设备命名方便   
-​		7、镜像卷：可以很方便的做数据镜像  
-​		8、卷快照：把逻辑卷中的数据快照保存到新的逻辑卷进行备份   
-
-**逻辑分区与逻辑卷的区别**
-
-​		逻辑卷与逻辑分区不是同一概念，逻辑分区容量大小不能改变；逻辑卷容量大小可以改变（基于物理卷和卷组之上的逻辑卷）；逻辑卷管理器（LVM）可以更轻松的管理磁盘空间（整合的磁盘池）
-
-### **LVM原理**
-
-​		Physical volume (PV物理卷)、Volume group (VG卷组)、Logical volume(LV逻辑卷)，通过图解更容易读懂物理磁盘、磁盘分区、物理卷、卷组、逻辑卷之间的关系。
+   Physical volume (PV物理卷)、Volume group (VG卷组)、Logical volume(LV逻辑卷)，通过图解更容易读懂物理磁盘、磁盘分区、物理卷、卷组、逻辑卷之间的关系。
 
 ![在这里插入图片描述](https://ekojunaidisalam.com/wp-content/uploads/2016/03/LVM-1024x944.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl8zOTc3NzYyNg==,size_16,color_FFFFFF,t_70)
 
