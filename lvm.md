@@ -4,7 +4,9 @@
 MBR（Master Boot Record）（主引导记录）和GPT（GUID Partition Table）（GUID意为全局唯一标识符）是在磁盘上存储分区信息的两种不同方式
 
 对于传统的MBR分区方式，有很多的限制： 
+
 1：最多4个主分区（3个主分区+1个扩展分区(扩展分区里面可以放多个逻辑分区)），无法创建大于2TB的分区，使用fdisk分区工具，而GPT分区方式不受这样的限制。  
+
 2：GPT分区方式将不会有这种限制，使用的工具是parted；  
 
 逻辑卷管理(LVM)，是 Logical Volume Manager（逻辑卷管理）的简写，lvm是卷的一种管理方式，并不是分区工具（也可不采用这种LVM管理方式）。
