@@ -17,6 +17,14 @@ MBR（Master Boot Record）（主引导记录）和GPT（GUID Partition Table）
 
 ![在这里插入图片描述](https://ekojunaidisalam.com/wp-content/uploads/2016/03/LVM-1024x944.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl8zOTc3NzYyNg==,size_16,color_FFFFFF,t_70)
 
+### 硬盘扩容的方式：
+- 新添加硬盘扩容（lvm）
+- 在原有的硬盘上扩容（lvm）
+- 非lvm硬盘扩容
+
+
+### 硬盘扩容（新添加硬盘）
+
 LVM扩容思维流程：创建一个物理分区 –-> 将这个物理分区转换为物理卷 –-> 把这个物理卷添加到要扩展的卷组中 -–> 然后才能用extend命令扩展此卷组中的逻辑卷。
 ```
 #操作系统
@@ -30,7 +38,7 @@ CentOS Linux release 7.4.1708 (Core)
 
 **操作步骤：**
 
-​		新添加硬盘-->fdisk -l查看硬盘状态-->fdisk创建磁盘分区-->修改分区类型8e-->更新内核分区表-->创建物理分区-->创建卷组-->创建逻辑卷-->格式化逻辑卷-->挂载lv（挂载目录事先存在，不存在创建）-->永久挂载
+​	新添加硬盘-->fdisk -l查看硬盘状态-->fdisk创建磁盘分区-->修改分区类型8e-->更新内核分区表-->创建物理分区-->创建卷组-->创建逻辑卷-->格式化逻辑卷-->挂载lv（挂载目录事先存在，不存在创建）-->永久挂载
 
 ```shell
 1、新添加两块磁盘sdb和sdc
@@ -798,7 +806,7 @@ this is a test for LVM
 **注意：卷组缩小空间，一定要要卷组的空闲空间大小大于删除的物理卷的空间大小。**
 
 
-## 磁盘扩容(在原有的基础)
+## 硬盘扩容(在原有硬盘上增加容量)
 
 一、环境
 虚拟机软件：VMware 14
@@ -813,7 +821,7 @@ this is a test for LVM
 
 然后左边菜单栏点击硬盘，在弹出的对话框选中硬盘，并点击扩展按钮，然后在弹出框中的最大磁盘大小修改未所需要的磁盘大小，比如我现在需要扩容30G，原本的磁盘大小是20G，所以我这里将原本的20G修改成50G，然后点击扩展
 
-![harddisk1](https://www.linuxidc.com/upload/2019_04/190427173691084.png)
+![harddisk2](https://www.linuxidc.com/upload/2019_04/190427173691084.png)
 
 然后开启虚拟机，对磁盘进行进一步的配置
 
@@ -822,23 +830,29 @@ this is a test for LVM
 ```
 # df -h
 ```
+![harddisk2](https://www.linuxidc.com/upload/2019_04/190427173691088.png)
 
 可看到当前还是原本的20G，并未扩容
 首先先通过命令查看到新磁盘的分区
 ```
 # fdisk -l
 ```
+![harddisk2](https://www.linuxidc.com/upload/2019_04/1904271736910813.png)
 
 然后对新加的磁盘进行分区操作：
 ```
 # fdisk /dev/sda
 ```
+![harddisk3](https://www.linuxidc.com/upload/2019_04/190427173691083.png)
+
+![harddisk4](https://www.linuxidc.com/upload/2019_04/190427173691082.png)
 
 期间，如果需要将分区类型的Linux修改为Linux LVM的话需要在新增了分区之后，选择t，然后选择8e，之后可以将新的分区修改为linux LVM
 之后我们可以再次用以下命令查看到磁盘当前情况
 ```
 # fdisk -l
 ```
+![harddisk4](https://www.linuxidc.com/upload/2019_04/190427173691081.png)
 
 重启虚拟机格式化新建分区
 ```
