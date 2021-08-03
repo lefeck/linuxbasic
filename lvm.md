@@ -15,7 +15,7 @@ MBR（Master Boot Record）（主引导记录）和GPT（GUID Partition Table）
 
    Physical volume (PV物理卷)、Volume group (VG卷组)、Logical volume(LV逻辑卷)，通过图解更容易读懂物理磁盘、磁盘分区、物理卷、卷组、逻辑卷之间的关系。
 
-![在这里插入图片描述](https://ekojunaidisalam.com/wp-content/uploads/2016/03/LVM-1024x944.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl8zOTc3NzYyNg==,size_16,color_FFFFFF,t_70)
+![在这里插入图片描述](https://ekojunaidisalam.com/wp-content/uploads/2016/03/LVM-1024x944.png?)
 
 ### 硬盘扩容的方式：
 - 新添加硬盘扩容（lvm）
