@@ -128,7 +128,7 @@ tag、index和offset三者组合就可以唯一确定一个地址。因此，当
 
 对于两路组相连映射方式，如果一个程序试图依次访问地址0x00、0x40、0x80时：
   0x00地址的数据可以被加载到way 0，0x40可以被加载到way 1(0x80地址数据占不考虑)。这样就在一定程度上避免了直接映射缓存的颠簸现象。在两路组相连缓存的情况下，0x00和0x40地址的数据都可以被同时缓存在cache中。假设，如果我们是N路(多路)组相连缓存，后面继续访问0x80，也可以同时缓存在cache中。
- 
+
 ![img](https://img-blog.csdnimg.cn/20201222230125202.jpg?)
 
   因此，当cache size一定的情况下，组相连缓存对性能的提升最差情况下也和直接映射缓存一样，在大部分情况下组相连缓存效果比直接映射缓存好。同时，其降低了cache颠簸的频率。从某种程度上来说，直接映射缓存是组相连缓存的一种特殊情况，每个组只有一个cache line而已。因此， 直接映射缓存也可以称作单路组相连缓存。
@@ -137,7 +137,7 @@ tag、index和offset三者组合就可以唯一确定一个地址。因此，当
 
 所有的cache line都在一个组内。这种缓存就是**全相连缓存**。依然以64 Byts大小cache, cache line size是8 Bytes为进行说明。
 
-![img](https://pic3.zhimg.com/80/v2-1e61e8d13030ed4f0b42c2d1a854ffce_720w.jpg)
+![img](./img/whole-conn.jpg)
 
 由于所有的cache line都在一个组内，因此地址中不需要set index部分。因为，只有一个组。根据地址中的tag部分和所有的cache line对应的tag进行比较（硬件上可能并行比较也可能串行比较）。哪个tag比较相等，就意味着命中某个cache line。
 
@@ -149,43 +149,18 @@ tag、index和offset三者组合就可以唯一确定一个地址。因此，当
   因此，综合成本的问题，同时为了解决直接映射高速缓存中的高速缓存颠簸问题，组相联（set associative）的高速缓存结构在现代处理器中得到广泛应用。
 
 
-## Cache分配策略(Cache allocation policy)
-
-cache的分配策略是指我们什么情况下应该为数据分配cache line。cache分配策略分为读和写两种情况。
-
-### 读分配(read allocation)
-
-当CPU读数据时，发生cache缺失，这种情况下都会分配一个cache line缓存从主存读取的数据。默认情况下，cache都支持读分配。
-
-### 写分配(write allocation)
-
-当CPU写数据发生cache缺失时，才会考虑写分配策略。当我们不支持写分配的情况下，写指令只会更新主存数据，然后就结束了。当支持写分配的时候，我们首先从主存中加载数据到cache line中（相当于先做个读分配动作），然后会更新cache line中的数据。
-
-
-
-## Cache更新策略(Cache update policy)
-
-cache更新策略是指当发生cache命中时，写操作应该如何更新数据。cache更新策略分成两种：写直通和回写。
-
-### 写直通(write through)
-
-当CPU执行store指令并在cache命中时，我们更新cache中的数据并且更新主存中的数据。**cache和主存的数据始终保持一致**。
-
-### 写回(write back)
-
-当CPU执行store指令并在cache命中时，我们只更新cache中的数据。并且每个cache line中会有一个bit位记录数据是否被修改过，称之为dirty bit（翻翻前面的图片，cache line旁边有一个D就是dirty bit）。我们会将dirty bit置位。主存中的数据只会在cache line被替换或者显示的clean操作时更新。因此，主存中的数据可能是未修改的数据，而修改的数据躺在cache中。**cache和主存的数据可能不一致。**
-
-同时思考个问题，为什么cache line大小是cache控制器和主存之间数据传输的最小单位呢？这也是因为每个cache line只有一个dirty bit。这一个dirty bit代表着整个cache line是否被修改的状态。
 
 ## 实例
 
+
+
 假设我们有一个64 Bytes大小直接映射缓存，cache line大小是8 Bytes，采用写分配和写回机制。当CPU从地址0x2a读取一个字节，cache中的数据将会如何变化呢？假设当前cache状态如下图所示(tag旁边valid一栏的数字1代表合法。0代表非法。后面Dirty的1代表dirty，0代表没有写过数据，即非dirty)。
 
-![img](https://pic3.zhimg.com/80/v2-ff2a4d78af3ff8d411e092a96941fd6a_720w.jpg)
+![img](./img/instance1.jpg)
 
 根据index找到对应的cache line，对应的tag部分valid bit是合法的，但是tag的值不相等，因此发生缺失。此时我们需要从地址0x28地址加载8字节数据到该cache line中。但是，我们发现当前cache line的dirty bit置位。因此，cache line里面的数据不能被简单的丢弃，由于采用写回机制，所以我们需要将cache中的数据0x11223344写到地址0x0128地址（这个地址根据tag中的值及所处的cache line行计算得到）。这个过程如下图所示。
 
-![img](https://pic3.zhimg.com/80/v2-1630dc6c3c099fdc1b92c8f33f1eea32_720w.jpg)
+![img](./img/instance.jpg)
 
 当写回操作完成，我们将主存中0x28地址开始的8个字节加载到该cache line中，并清除dirty bit。然后根据offset找到0x52返回给CPU。
 
