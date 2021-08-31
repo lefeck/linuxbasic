@@ -1,6 +1,6 @@
 # CentOS 7 root密码忘记
 
-[centos7不同版本下载](https://man.linuxde.net/download/centos_7_4)
+[centos7不同版本下载](https://man.linuxde.net/download/centos)
 
    注：所有环境均在vmware虚拟机上实现
 
