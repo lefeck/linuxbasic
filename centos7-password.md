@@ -1,5 +1,7 @@
 # CentOS 7 root密码忘记
 
+[centos7不同版本下载](https://man.linuxde.net/download/centos_7_4)
+
    注：所有环境均在vmware虚拟机上实现
 
 ## 一.通过光盘镜像进入救援模式修改root密码
